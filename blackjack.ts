@@ -1,7 +1,7 @@
-const spades: Array<object> = [{Suit: "D", Value: "A"}, {Suit: "D", Value: "2"},{Suit: "D", Value: "3"}, {Suit: "D", Value: "4"},{Suit: "D", Value: "5"}, {Suit: "D", Value: "6"},{Suit: "D", Value: "7"}, {Suit: "D", Value: "8"},{Suit: "D", Value: "9"}, {Suit: "D", Value: "0"},{Suit: "D", Value: "J"}, {Suit: "D", Value: "Q"},{Suit: "D", Value: "K"}];
+const spades: Array<object> = [{Suit: "S", Value: "A"}, {Suit: "S", Value: "2"},{Suit: "S", Value: "3"}, {Suit: "S", Value: "4"},{Suit: "S", Value: "5"}, {Suit: "S", Value: "6"},{Suit: "S", Value: "7"}, {Suit: "S", Value: "8"},{Suit: "S", Value: "9"}, {Suit: "S", Value: "0"},{Suit: "S", Value: "J"}, {Suit: "S", Value: "Q"},{Suit: "S", Value: "K"}];
 const diamonds: Array<object> = [{Suit: "D", Value: "A"}, {Suit: "D", Value: "2"},{Suit: "D", Value: "3"}, {Suit: "D", Value: "4"},{Suit: "D", Value: "5"}, {Suit: "D", Value: "6"},{Suit: "D", Value: "7"}, {Suit: "D", Value: "8"},{Suit: "D", Value: "9"}, {Suit: "D", Value: "0"},{Suit: "D", Value: "J"}, {Suit: "D", Value: "Q"},{Suit: "D", Value: "K"}];
 const hearts: Array<object> = [{Suit: "H", Value: "A"}, {Suit: "H", Value: "2"},{Suit: "H", Value: "3"}, {Suit: "H", Value: "4"},{Suit: "H", Value: "5"}, {Suit: "H", Value: "6"},{Suit: "H", Value: "7"}, {Suit: "H", Value: "8"},{Suit: "H", Value: "9"}, {Suit: "H", Value: "0"},{Suit: "H", Value: "J"}, {Suit: "H", Value: "Q"},{Suit: "H", Value: "K"}];
-const clubs: Array<object> = [{Suit: "D", Value: "A"}, {Suit: "D", Value: "2"},{Suit: "D", Value: "3"}, {Suit: "D", Value: "4"},{Suit: "D", Value: "5"}, {Suit: "D", Value: "6"},{Suit: "D", Value: "7"}, {Suit: "D", Value: "8"},{Suit: "D", Value: "9"}, {Suit: "D", Value: "0"},{Suit: "D", Value: "J"}, {Suit: "D", Value: "Q"},{Suit: "D", Value: "K"}];
+const clubs: Array<object> = [{Suit: "C", Value: "A"}, {Suit: "C", Value: "2"},{Suit: "C", Value: "3"}, {Suit: "C", Value: "4"},{Suit: "C", Value: "5"}, {Suit: "C", Value: "6"},{Suit: "C", Value: "7"}, {Suit: "C", Value: "8"},{Suit: "C", Value: "9"}, {Suit: "C", Value: "0"},{Suit: "C", Value: "J"}, {Suit: "C", Value: "Q"},{Suit: "C", Value: "K"}];
 let deck: Array<object> = [];
 let player: Array<object> = [];
 let dealer: Array<object> = [];
@@ -10,6 +10,7 @@ let playerdisplay = document.getElementById("playerscore");
 let dealerdisplay = document.getElementById("dealerscore");
 let hitbutton = document.getElementById("hit");
 let standbutton = document.getElementById("stand");
+let playerhold = document.getElementById("playercardholder")
 let playerscore: number = 0;
 let dealerscore: number = 0;
 let playerstand: boolean;
@@ -45,9 +46,11 @@ function startgame() {
     dealerscore = 0;
     softcount = 0;
     playerstand = false;
+    playerhold.innerHTML = ""
     shuffle();
     deal(player, 2);
     deal(dealer, 2);
+    makecard(playerhold, 2)
     convert(player, true);
     convert(dealer, false);
     playerdisplay.innerText = `${playerscore}`
@@ -159,6 +162,16 @@ function push() {
     else console.log("Score matched, push.")
 }
 
+function makecard(target,quantity=1) {
+   for (let i=1; i<quantity+1;i++) {
+       let cardtraits=player[player.length-i];
+       let newcard = document.createElement("div");
+       newcard.classList.add("card");
+       newcard.innerHTML = `${cardtraits["Value"]} - ${cardtraits["Suit"]}`
+       target.append(newcard);
+   }
+}
+
 startbutton.addEventListener("click", () => {
     startgame()
     convert(player, true);
@@ -169,8 +182,9 @@ startbutton.addEventListener("click", () => {
 
 hitbutton.addEventListener("click", () => {
     deal(player, 1);
-    playerdisplay.innerText = `${player}`
+    makecard(playerhold,1);
     convert(player, true);
+    playerdisplay.innerText = `${playerscore}`
     if (playerscore > 20) {
         evaluate()
     }
