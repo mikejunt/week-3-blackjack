@@ -31,6 +31,7 @@
 
         .dealer-hide {
             visibility: hidden;
+            background-color: cadetblue;
         }
 
         .card {
@@ -41,11 +42,13 @@
             margin: 5px;
             border: solid black;
         }
-        #playercardholder {
+
+        .cardholder {
             height: 220px;
             width: 880px;
             background-color: burlywood;
         }
+
         .card-number {
             font-weight: bold;
             font-size: 30px;
@@ -55,41 +58,50 @@
             padding-left: 5px;
             padding-right: 5px;
         }
+
         .float-left {
             float: left;
         }
+
         .float-right {
             float: right;
             text-align: right;
         }
+
         .suit-display {
             height: 140px;
             width: 130px;
             font-size: 70px;
             line-height: 140px;
             text-align: center;
-            clear:both;
+            clear: both;
         }
+
         .red {
             color: red
         }
+
         .black {
             color: black;
         }
-
-
     </style>
 </head>
 
 <body>
-    <main><div id="playercardholder"></div>
-    <div id="playerscore" class="score"></div>
-    <div id="dealerscore" class="score"></div>
-    <div><button id="start" class="start">START</button></div>
-    <div><button id="hit" class="hit">HIT</button></div>
-    <div><button id="stand" class="stand">STAND</button></div>
+    <main>
+        <section id="playercardholder" class="cardholder"></section>
+        <section class="interface">
+            <div id="playerscore" class="score"></div>
+            <div class="score"><div id="dealerscore" class="dealer-hide hide-target"></div></div>
+            <div><button id="start" class="start">START</button></div>
+            <div><button id="hit" class="hit">HIT</button></div>
+            <div><button id="stand" class="stand">STAND</button></div>
+        </section>
+        <section class="dealer-outside cardholder">
+            <div id="dealercardholder" class="dealer-hide hide-target"></div>
+        </section>
     </main>
-<div class="card"><div class="card-number float-left">7</div><div class="suit-display">H</div><div class="card-number float-right">7</div></div>
+    
 </body>
 <script src="blackjack.js"></script>
 

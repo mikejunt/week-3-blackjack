@@ -11,7 +11,8 @@ let playerdisplay = document.getElementById("playerscore");
 let dealerdisplay = document.getElementById("dealerscore");
 let hitbutton = document.getElementById("hit");
 let standbutton = document.getElementById("stand");
-let playerhold = document.getElementById("playercardholder")
+let playerhold = document.getElementById("playercardholder");
+let dealerhold = document.getElementById("dealercardholder");
 let playerscore: number = 0;
 let dealerscore: number = 0;
 let playerstand: boolean;
@@ -47,10 +48,13 @@ function startgame() {
     softcount = 0;
     playerstand = false;
     playerhold.innerHTML = ""
+    dealerhold.innerHTML = ""
+    document.querySelectorAll(".hide-target").forEach((element)=>element.classList.add("dealer-hide"))
     shuffle();
     deal(player, 2);
     deal(dealer, 2);
-    makecard(playerhold, 2)
+    makecard(playerhold,player, 2);
+    makecard(dealerhold,dealer, 2)
     convert(player, true);
     convert(dealer, false);
     playerdisplay.innerText = `${playerscore}`
@@ -132,6 +136,7 @@ function evaluate() {
 function win() {
     wintotal++;
     console.log(`${wintotal} wins.  ${losstotal} losses.  ${pushtotal} push.`)
+    document.querySelectorAll(".hide-target").forEach((element)=>{element.classList.remove("dealer-hide")})
     if (playerscore === 21) {
         console.log("Blackjack!")
     }
@@ -162,15 +167,14 @@ function push() {
     else console.log("Score matched, push.")
 }
 
-function makecard(target, quantity = 1) {
+function makecard(target,party: Array<object>,quantity = 1) {
     for (let i = 1; i < quantity + 1; i++) {
-        let cardtraits = player[player.length - i];
+        let cardtraits = party[party.length - i];
         let newcard = document.createElement("div");
         newcard.classList.add("card");
         newcard.innerHTML = `<div class="card-number float-left">${cardtraits["Value"]}</div><div class="suit-display">${cardtraits["Suit"]}</div><div class="card-number float-right">${cardtraits["Value"]}</div>`
         if (cardtraits["Suit"] === "♥" || cardtraits["Suit"] === "♦") { newcard.classList.add("red") }
         else newcard.classList.add("black");
-        console.log(`${cardtraits["Value"]}`)
         target.append(newcard);
     }
 }
@@ -180,13 +184,12 @@ startbutton.addEventListener("click", () => {
     startgame()
     convert(player, true);
     convert(dealer, false);
-    console.log(`P: ${playerscore} D:${dealerscore}`);
     evaluate()
 })
 
 hitbutton.addEventListener("click", () => {
     deal(player, 1);
-    makecard(playerhold, 1);
+    makecard(playerhold,player,1);
     convert(player, true);
     playerdisplay.innerText = `${playerscore}`
     if (playerscore > 20) {
@@ -199,7 +202,8 @@ standbutton.addEventListener("click", () => {
     if (dealerscore < 17) {
         do {
             deal(dealer, 1);
-            convert(dealer, false)
+            convert(dealer, false);
+            makecard(dealerhold,dealer,1)
         }
         while (dealerscore < 17)
     }
@@ -207,6 +211,7 @@ standbutton.addEventListener("click", () => {
         do {
             deal(dealer, 1);
             convert(dealer, false)
+            makecard(dealerhold,dealer,1)
         }
         while (softcount < 7)
     }

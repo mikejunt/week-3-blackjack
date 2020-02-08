@@ -19,6 +19,7 @@ var dealerdisplay = document.getElementById("dealerscore");
 var hitbutton = document.getElementById("hit");
 var standbutton = document.getElementById("stand");
 var playerhold = document.getElementById("playercardholder");
+var dealerhold = document.getElementById("dealercardholder");
 var playerscore = 0;
 var dealerscore = 0;
 var playerstand;
@@ -52,10 +53,13 @@ function startgame() {
     softcount = 0;
     playerstand = false;
     playerhold.innerHTML = "";
+    dealerhold.innerHTML = "";
+    document.querySelectorAll(".hide-target").forEach(function (element) { return element.classList.add("dealer-hide"); });
     shuffle();
     deal(player, 2);
     deal(dealer, 2);
-    makecard(playerhold, 2);
+    makecard(playerhold, player, 2);
+    makecard(dealerhold, dealer, 2);
     convert(player, true);
     convert(dealer, false);
     playerdisplay.innerText = "" + playerscore;
@@ -138,6 +142,7 @@ function evaluate() {
 function win() {
     wintotal++;
     console.log(wintotal + " wins.  " + losstotal + " losses.  " + pushtotal + " push.");
+    document.querySelectorAll(".hide-target").forEach(function (element) { element.classList.remove("dealer-hide"); });
     if (playerscore === 21) {
         console.log("Blackjack!");
     }
@@ -168,10 +173,10 @@ function push() {
     else
         console.log("Score matched, push.");
 }
-function makecard(target, quantity) {
+function makecard(target, party, quantity) {
     if (quantity === void 0) { quantity = 1; }
     for (var i = 1; i < quantity + 1; i++) {
-        var cardtraits = player[player.length - i];
+        var cardtraits = party[party.length - i];
         var newcard = document.createElement("div");
         newcard.classList.add("card");
         newcard.innerHTML = "<div class=\"card-number float-left\">" + cardtraits["Value"] + "</div><div class=\"suit-display\">" + cardtraits["Suit"] + "</div><div class=\"card-number float-right\">" + cardtraits["Value"] + "</div>";
@@ -180,7 +185,6 @@ function makecard(target, quantity) {
         }
         else
             newcard.classList.add("black");
-        console.log("" + cardtraits["Value"]);
         target.append(newcard);
     }
 }
@@ -189,12 +193,11 @@ startbutton.addEventListener("click", function () {
     startgame();
     convert(player, true);
     convert(dealer, false);
-    console.log("P: " + playerscore + " D:" + dealerscore);
     evaluate();
 });
 hitbutton.addEventListener("click", function () {
     deal(player, 1);
-    makecard(playerhold, 1);
+    makecard(playerhold, player, 1);
     convert(player, true);
     playerdisplay.innerText = "" + playerscore;
     if (playerscore > 20) {
@@ -207,12 +210,14 @@ standbutton.addEventListener("click", function () {
         do {
             deal(dealer, 1);
             convert(dealer, false);
+            makecard(dealerhold, dealer, 1);
         } while (dealerscore < 17);
     }
     if (dealerscore === 17 && softcount < 7) {
         do {
             deal(dealer, 1);
             convert(dealer, false);
+            makecard(dealerhold, dealer, 1);
         } while (softcount < 7);
     }
     dealerdisplay.innerText = "" + dealerscore;
