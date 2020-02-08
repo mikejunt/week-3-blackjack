@@ -1,41 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="blackjack.css">
     <style>
-     .score {
-         height: 120px;
-         width: 120px;
-         background-color: black;
-         color: white;
-         font-size: 35px;
-         line-height: 120px;
-         margin: 10px;
-         display: inline-block;
-         text-align: center;
-     }   
-     .start {
-         height: 40px;
-         width: 90px;
-         margin-left: 95px;
-     }
-     .dealer-hide {
-         visibility: hidden;
-     }
-     
+        body {
+            color: white;
+            background-color: black;
+        }
 
+        .score {
+            height: 120px;
+            width: 120px;
+            background-color: blue;
+            font-size: 35px;
+            line-height: 120px;
+            margin: 10px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .start {
+            height: 40px;
+            width: 90px;
+            margin-left: 95px;
+        }
+
+        .dealer-hide {
+            visibility: hidden;
+        }
+
+        .card {
+            height: 200px;
+            width: 80px;
+            background-color: white;
+        }
+        #playercardholder {
+            height: 250px;
+            width: 300px;
+            background-color: burlywood;
+        }
     </style>
 </head>
+
 <body>
+    <main><div id="playercardholder"></div>
     <div id="playerscore" class="score"></div>
     <div id="dealerscore" class="score"></div>
     <div><button id="start" class="start">START</button></div>
     <div><button id="hit" class="hit">HIT</button></div>
     <div><button id="stand" class="stand">STAND</button></div>
-    
+    </main>
+
 </body>
 <script src="blackjack.js"></script>
+
 </html>

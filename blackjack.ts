@@ -1,10 +1,10 @@
-const spades: Array<string> = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "0", "J", "Q", "K"];
-const diamonds: Array<string> = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "0", "J", "Q", "K"];
-const hearts: Array<string> = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "0", "J", "Q", "K"];
-const clubs: Array<string> = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "0", "J", "Q", "K"];
-let deck: Array<string> = [];
-let player: Array<string> = [];
-let dealer: Array<string> = [];
+const spades: Array<object> = [{Suit: "D", Value: "A"}, {Suit: "D", Value: "2"},{Suit: "D", Value: "3"}, {Suit: "D", Value: "4"},{Suit: "D", Value: "5"}, {Suit: "D", Value: "6"},{Suit: "D", Value: "7"}, {Suit: "D", Value: "8"},{Suit: "D", Value: "9"}, {Suit: "D", Value: "0"},{Suit: "D", Value: "J"}, {Suit: "D", Value: "Q"},{Suit: "D", Value: "K"}];
+const diamonds: Array<object> = [{Suit: "D", Value: "A"}, {Suit: "D", Value: "2"},{Suit: "D", Value: "3"}, {Suit: "D", Value: "4"},{Suit: "D", Value: "5"}, {Suit: "D", Value: "6"},{Suit: "D", Value: "7"}, {Suit: "D", Value: "8"},{Suit: "D", Value: "9"}, {Suit: "D", Value: "0"},{Suit: "D", Value: "J"}, {Suit: "D", Value: "Q"},{Suit: "D", Value: "K"}];
+const hearts: Array<object> = [{Suit: "H", Value: "A"}, {Suit: "H", Value: "2"},{Suit: "H", Value: "3"}, {Suit: "H", Value: "4"},{Suit: "H", Value: "5"}, {Suit: "H", Value: "6"},{Suit: "H", Value: "7"}, {Suit: "H", Value: "8"},{Suit: "H", Value: "9"}, {Suit: "H", Value: "0"},{Suit: "H", Value: "J"}, {Suit: "H", Value: "Q"},{Suit: "H", Value: "K"}];
+const clubs: Array<object> = [{Suit: "D", Value: "A"}, {Suit: "D", Value: "2"},{Suit: "D", Value: "3"}, {Suit: "D", Value: "4"},{Suit: "D", Value: "5"}, {Suit: "D", Value: "6"},{Suit: "D", Value: "7"}, {Suit: "D", Value: "8"},{Suit: "D", Value: "9"}, {Suit: "D", Value: "0"},{Suit: "D", Value: "J"}, {Suit: "D", Value: "Q"},{Suit: "D", Value: "K"}];
+let deck: Array<object> = [];
+let player: Array<object> = [];
+let dealer: Array<object> = [];
 let startbutton = document.getElementById("start");
 let playerdisplay = document.getElementById("playerscore");
 let dealerdisplay = document.getElementById("dealerscore");
@@ -19,6 +19,7 @@ let pushtotal: number = 0;
 let losstotal: number = 0;
 
 
+
 function shuffle() {
     deck = [...spades, ...diamonds, ...hearts, ...clubs];
     for (let i = deck.length - 1; i > 0; i--) {
@@ -28,7 +29,7 @@ function shuffle() {
     return deck
 }
 
-function deal(target: Array<string>, number = 1) {
+function deal(target: Array<object>, number = 1) {
     let cards: number = 0;
     do {
         target.push(deck.pop());
@@ -49,20 +50,22 @@ function startgame() {
     deal(dealer, 2);
     convert(player, true);
     convert(dealer, false);
-    playerdisplay.innerText = `${player}`
-    dealerdisplay.innerText = `${dealer}`
+    playerdisplay.innerText = `${playerscore}`
+    dealerdisplay.innerText = `${dealerscore}`
 }
 
-function convert(playername: Array<string>, isplayer: boolean) {
+function cardsort(a: object, b ) {
+    if ( a["Value"] === "A"){
+      return 1;
+    }
+    return 0;
+  }
+
+function convert(playername: Array<object>, isplayer: boolean) {
     let countscore = 0;
-    const evaluatearray = playername.reduce((acc, element) => {
-        if (element === "A") {
-            return [...acc, element];
-        }
-        return [element, ...acc]
-    }, []);
+    const evaluatearray: Array<object> = playername.sort(cardsort)
     for (let i = 0; i < evaluatearray.length; i++) {
-        switch (evaluatearray[i]) {
+        switch (evaluatearray[i]["Value"]) {
             case "K":
             case "Q":
             case "J":
@@ -76,8 +79,8 @@ function convert(playername: Array<string>, isplayer: boolean) {
             case "7":
             case "8":
             case "9": {
-                countscore = countscore + parseInt(evaluatearray[i]);
-                softcount = softcount + parseInt(evaluatearray[i]);
+                countscore = countscore + parseInt(evaluatearray[i]["Value"]);
+                softcount = softcount + parseInt(evaluatearray[i]["Value"]);
                 break
             }
             case "A": softcount++;
@@ -189,6 +192,6 @@ standbutton.addEventListener("click", () => {
         }
         while (softcount < 7)
     }
-    dealerdisplay.innerText = `${dealer}`
+    dealerdisplay.innerText = `${dealerscore}`
     evaluate()
 })

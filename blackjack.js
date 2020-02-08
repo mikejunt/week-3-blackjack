@@ -5,10 +5,10 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
-var spades = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "0", "J", "Q", "K"];
-var diamonds = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "0", "J", "Q", "K"];
-var hearts = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "0", "J", "Q", "K"];
-var clubs = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "0", "J", "Q", "K"];
+var spades = [{ Suit: "D", Value: "A" }, { Suit: "D", Value: "2" }, { Suit: "D", Value: "3" }, { Suit: "D", Value: "4" }, { Suit: "D", Value: "5" }, { Suit: "D", Value: "6" }, { Suit: "D", Value: "7" }, { Suit: "D", Value: "8" }, { Suit: "D", Value: "9" }, { Suit: "D", Value: "0" }, { Suit: "D", Value: "J" }, { Suit: "D", Value: "Q" }, { Suit: "D", Value: "K" }];
+var diamonds = [{ Suit: "D", Value: "A" }, { Suit: "D", Value: "2" }, { Suit: "D", Value: "3" }, { Suit: "D", Value: "4" }, { Suit: "D", Value: "5" }, { Suit: "D", Value: "6" }, { Suit: "D", Value: "7" }, { Suit: "D", Value: "8" }, { Suit: "D", Value: "9" }, { Suit: "D", Value: "0" }, { Suit: "D", Value: "J" }, { Suit: "D", Value: "Q" }, { Suit: "D", Value: "K" }];
+var hearts = [{ Suit: "H", Value: "A" }, { Suit: "H", Value: "2" }, { Suit: "H", Value: "3" }, { Suit: "H", Value: "4" }, { Suit: "H", Value: "5" }, { Suit: "H", Value: "6" }, { Suit: "H", Value: "7" }, { Suit: "H", Value: "8" }, { Suit: "H", Value: "9" }, { Suit: "H", Value: "0" }, { Suit: "H", Value: "J" }, { Suit: "H", Value: "Q" }, { Suit: "H", Value: "K" }];
+var clubs = [{ Suit: "D", Value: "A" }, { Suit: "D", Value: "2" }, { Suit: "D", Value: "3" }, { Suit: "D", Value: "4" }, { Suit: "D", Value: "5" }, { Suit: "D", Value: "6" }, { Suit: "D", Value: "7" }, { Suit: "D", Value: "8" }, { Suit: "D", Value: "9" }, { Suit: "D", Value: "0" }, { Suit: "D", Value: "J" }, { Suit: "D", Value: "Q" }, { Suit: "D", Value: "K" }];
 var deck = [];
 var player = [];
 var dealer = [];
@@ -53,19 +53,20 @@ function startgame() {
     deal(dealer, 2);
     convert(player, true);
     convert(dealer, false);
-    playerdisplay.innerText = "" + player;
-    dealerdisplay.innerText = "" + dealer;
+    playerdisplay.innerText = "" + playerscore;
+    dealerdisplay.innerText = "" + dealerscore;
+}
+function cardsort(a, b) {
+    if (a["Value"] === "A") {
+        return 1;
+    }
+    return 0;
 }
 function convert(playername, isplayer) {
     var countscore = 0;
-    var evaluatearray = playername.reduce(function (acc, element) {
-        if (element === "A") {
-            return __spreadArrays(acc, [element]);
-        }
-        return __spreadArrays([element], acc);
-    }, []);
+    var evaluatearray = playername.sort(cardsort);
     for (var i = 0; i < evaluatearray.length; i++) {
-        switch (evaluatearray[i]) {
+        switch (evaluatearray[i]["Value"]) {
             case "K":
             case "Q":
             case "J":
@@ -83,8 +84,8 @@ function convert(playername, isplayer) {
             case "7":
             case "8":
             case "9": {
-                countscore = countscore + parseInt(evaluatearray[i]);
-                softcount = softcount + parseInt(evaluatearray[i]);
+                countscore = countscore + parseInt(evaluatearray[i]["Value"]);
+                softcount = softcount + parseInt(evaluatearray[i]["Value"]);
                 break;
             }
             case "A":
@@ -191,6 +192,6 @@ standbutton.addEventListener("click", function () {
             convert(dealer, false);
         } while (softcount < 7);
     }
-    dealerdisplay.innerText = "" + dealer;
+    dealerdisplay.innerText = "" + dealerscore;
     evaluate();
 });
