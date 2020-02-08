@@ -15,7 +15,7 @@ let dealerscore: number = 0;
 let playerstand: boolean;
 let softcount: number = 0;
 let wintotal: number = 0;
-let tietotal: number = 0;
+let pushtotal: number = 0;
 let losstotal: number = 0;
 
 
@@ -25,7 +25,6 @@ function shuffle() {
         const j = Math.floor(Math.random() * (i + 1));
         [deck[i], deck[j]] = [deck[j], deck[i]];
     }
-    console.log(deck)
     return deck
 }
 
@@ -62,7 +61,6 @@ function convert(playername: Array<string>, isplayer: boolean) {
         }
         return [element, ...acc]
     }, []);
-    console.log(evaluatearray)
     for (let i = 0; i < evaluatearray.length; i++) {
         switch (evaluatearray[i]) {
             case "K":
@@ -91,7 +89,6 @@ function convert(playername: Array<string>, isplayer: boolean) {
                 }
         }
     }
-    console.log(countscore)
     if (isplayer === true) {
         playerscore = countscore;
     }
@@ -102,31 +99,61 @@ function convert(playername: Array<string>, isplayer: boolean) {
 
 function evaluate() {
     if (playerscore === 21 && playerscore === dealerscore) {
-        console.log("Tie: Double Blackjack.")
+        push();
     }
     else if (playerscore === 21) {
-        console.log("Blackjack.  Win process.")
+        win()
     }
     else if (playerscore > 21) {
-        console.log("Player busted, over 21. Loss.")
+        loss()
     }
     else if (playerstand === true) {
         if (dealerscore === 21) {
-            console.log("Player lost: Dealer has Blackjack")
+            loss()
         }
-        else if (dealerscore > 21) {
-            console.log("Dealer over 21.  Win Process.")
-        }
-        else if (playerscore > dealerscore) {
-            console.log("Player wins on score, both under 21.")
+        else if (dealerscore > 21 || playerscore > dealerscore) {
+            win();
         }
         else if (playerscore < dealerscore) {
-            console.log("Player loses on score, both under 21")
+            loss();
         }
         else if (playerscore === dealerscore) {
-            console.log("Push.  Tie display.")
+            push();
         }
     }
+}
+
+function win() {
+    wintotal++;
+    console.log(`${wintotal} wins.  ${losstotal} losses.  ${pushtotal} push.`)
+    if (playerscore === 21) {
+        console.log("Blackjack!")
+    }
+    else if (dealerscore > 21) {
+        console.log("Dealer Busted!")
+    }
+    else console.log("Won on score!")
+}
+
+function loss() {
+    losstotal++;
+    console.log(`${wintotal} wins.  ${losstotal} losses.  ${pushtotal} push.`)
+    if (dealerscore === 21) {
+        console.log("Dealer blackjack.")
+    }
+    else if (playerscore > 21) {
+        console.log("Player busted.")
+    }
+    else console.log("Loss on score.")
+}
+
+function push() {
+    pushtotal++;
+    console.log(`${wintotal} wins.  ${losstotal} losses.  ${pushtotal} push.`)
+    if (playerscore === 21) {
+        console.log("Double blackjack?!")
+    }
+    else console.log("Score matched, push.")
 }
 
 startbutton.addEventListener("click", () => {
