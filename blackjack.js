@@ -16,8 +16,11 @@ var startbutton = document.getElementById("start");
 var playerdisplay = document.getElementById("playerscore");
 var dealerdisplay = document.getElementById("dealerscore");
 var hitbutton = document.getElementById("hit");
+var standbutton = document.getElementById("stand");
 var playerscore = 0;
 var dealerscore = 0;
+var playerstand;
+var softcount = 0;
 function shuffle() {
     var _a;
     deck = __spreadArrays(spades, diamonds, hearts, clubs);
@@ -41,11 +44,13 @@ function startgame() {
     dealer = [];
     playerscore = 0;
     dealerscore = 0;
+    softcount = 0;
+    playerstand = false;
     shuffle();
     deal(player, 2);
-    console.log(player);
     deal(dealer, 2);
-    console.log(dealer);
+    convert(player, true);
+    convert(dealer, false);
     playerdisplay.innerText = "" + player;
     dealerdisplay.innerText = "" + dealer;
 }
@@ -65,6 +70,7 @@ function convert(playername, isplayer) {
             case "J":
             case "0": {
                 countscore = countscore + 10;
+                softcount = softcount + 10;
                 break;
             }
             case "1":
@@ -77,14 +83,17 @@ function convert(playername, isplayer) {
             case "8":
             case "9": {
                 countscore = countscore + parseInt(evaluatearray[i]);
+                softcount = softcount + parseInt(evaluatearray[i]);
                 break;
             }
-            case "A": if (countscore < 11) {
-                countscore = countscore + 11;
-            }
-            else {
-                countscore++;
-            }
+            case "A":
+                softcount++;
+                if (countscore < 11) {
+                    countscore = countscore + 11;
+                }
+                else {
+                    countscore++;
+                }
         }
     }
     console.log(countscore);
@@ -95,13 +104,63 @@ function convert(playername, isplayer) {
         dealerscore = countscore;
     }
 }
+function evaluate() {
+    if (playerscore === 21 && playerscore === dealerscore) {
+        console.log("Tie: Double Blackjack.");
+    }
+    else if (playerscore === 21) {
+        console.log("Blackjack.  Win process.");
+    }
+    else if (playerscore > 21) {
+        console.log("Player busted, over 21. Loss.");
+    }
+    else if (playerstand === true) {
+        if (dealerscore === 21) {
+            console.log("Player lost: Dealer has Blackjack");
+        }
+        else if (dealerscore > 21) {
+            console.log("Dealer over 21.  Win Process.");
+        }
+        else if (playerscore > dealerscore) {
+            console.log("Player wins on score, both under 21.");
+        }
+        else if (playerscore < dealerscore) {
+            console.log("Player loses on score, both under 21");
+        }
+        else if (playerscore === dealerscore) {
+            console.log("Push.  Tie display.");
+        }
+    }
+}
 startbutton.addEventListener("click", function () {
     startgame();
     convert(player, true);
     convert(dealer, false);
     console.log("P: " + playerscore + " D:" + dealerscore);
+    evaluate();
 });
 hitbutton.addEventListener("click", function () {
     deal(player, 1);
     playerdisplay.innerText = "" + player;
+    convert(player, true);
+    if (playerscore > 20) {
+        evaluate();
+    }
+});
+standbutton.addEventListener("click", function () {
+    playerstand = true;
+    if (dealerscore < 17) {
+        do {
+            deal(dealer, 1);
+            convert(dealer, false);
+        } while (dealerscore < 17);
+    }
+    if (dealerscore === 17 && softcount < 7) {
+        do {
+            deal(dealer, 1);
+            convert(dealer, false);
+        } while (softcount < 7);
+    }
+    dealerdisplay.innerText = "" + dealer;
+    evaluate();
 });
