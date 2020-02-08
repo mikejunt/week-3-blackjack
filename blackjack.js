@@ -5,10 +5,11 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
-var spades = [{ Suit: "S", Value: "A" }, { Suit: "S", Value: "2" }, { Suit: "S", Value: "3" }, { Suit: "S", Value: "4" }, { Suit: "S", Value: "5" }, { Suit: "S", Value: "6" }, { Suit: "S", Value: "7" }, { Suit: "S", Value: "8" }, { Suit: "S", Value: "9" }, { Suit: "S", Value: "0" }, { Suit: "S", Value: "J" }, { Suit: "S", Value: "Q" }, { Suit: "S", Value: "K" }];
-var diamonds = [{ Suit: "D", Value: "A" }, { Suit: "D", Value: "2" }, { Suit: "D", Value: "3" }, { Suit: "D", Value: "4" }, { Suit: "D", Value: "5" }, { Suit: "D", Value: "6" }, { Suit: "D", Value: "7" }, { Suit: "D", Value: "8" }, { Suit: "D", Value: "9" }, { Suit: "D", Value: "0" }, { Suit: "D", Value: "J" }, { Suit: "D", Value: "Q" }, { Suit: "D", Value: "K" }];
-var hearts = [{ Suit: "H", Value: "A" }, { Suit: "H", Value: "2" }, { Suit: "H", Value: "3" }, { Suit: "H", Value: "4" }, { Suit: "H", Value: "5" }, { Suit: "H", Value: "6" }, { Suit: "H", Value: "7" }, { Suit: "H", Value: "8" }, { Suit: "H", Value: "9" }, { Suit: "H", Value: "0" }, { Suit: "H", Value: "J" }, { Suit: "H", Value: "Q" }, { Suit: "H", Value: "K" }];
-var clubs = [{ Suit: "C", Value: "A" }, { Suit: "C", Value: "2" }, { Suit: "C", Value: "3" }, { Suit: "C", Value: "4" }, { Suit: "C", Value: "5" }, { Suit: "C", Value: "6" }, { Suit: "C", Value: "7" }, { Suit: "C", Value: "8" }, { Suit: "C", Value: "9" }, { Suit: "C", Value: "0" }, { Suit: "C", Value: "J" }, { Suit: "C", Value: "Q" }, { Suit: "C", Value: "K" }];
+// global variables
+var spades = [{ Suit: "S", Value: "A" }, { Suit: "S", Value: "2" }, { Suit: "S", Value: "3" }, { Suit: "S", Value: "4" }, { Suit: "S", Value: "5" }, { Suit: "S", Value: "6" }, { Suit: "S", Value: "7" }, { Suit: "S", Value: "8" }, { Suit: "S", Value: "9" }, { Suit: "S", Value: "10" }, { Suit: "S", Value: "J" }, { Suit: "S", Value: "Q" }, { Suit: "S", Value: "K" }];
+var diamonds = [{ Suit: "D", Value: "A" }, { Suit: "D", Value: "2" }, { Suit: "D", Value: "3" }, { Suit: "D", Value: "4" }, { Suit: "D", Value: "5" }, { Suit: "D", Value: "6" }, { Suit: "D", Value: "7" }, { Suit: "D", Value: "8" }, { Suit: "D", Value: "9" }, { Suit: "D", Value: "10" }, { Suit: "D", Value: "J" }, { Suit: "D", Value: "Q" }, { Suit: "D", Value: "K" }];
+var hearts = [{ Suit: "H", Value: "A" }, { Suit: "H", Value: "2" }, { Suit: "H", Value: "3" }, { Suit: "H", Value: "4" }, { Suit: "H", Value: "5" }, { Suit: "H", Value: "6" }, { Suit: "H", Value: "7" }, { Suit: "H", Value: "8" }, { Suit: "H", Value: "9" }, { Suit: "H", Value: "10" }, { Suit: "H", Value: "J" }, { Suit: "H", Value: "Q" }, { Suit: "H", Value: "K" }];
+var clubs = [{ Suit: "C", Value: "A" }, { Suit: "C", Value: "2" }, { Suit: "C", Value: "3" }, { Suit: "C", Value: "4" }, { Suit: "C", Value: "5" }, { Suit: "C", Value: "6" }, { Suit: "C", Value: "7" }, { Suit: "C", Value: "8" }, { Suit: "C", Value: "9" }, { Suit: "C", Value: "10" }, { Suit: "C", Value: "J" }, { Suit: "C", Value: "Q" }, { Suit: "C", Value: "K" }];
 var deck = [];
 var player = [];
 var dealer = [];
@@ -25,6 +26,7 @@ var softcount = 0;
 var wintotal = 0;
 var pushtotal = 0;
 var losstotal = 0;
+// functions
 function shuffle() {
     var _a;
     deck = __spreadArrays(spades, diamonds, hearts, clubs);
@@ -73,7 +75,7 @@ function convert(playername, isplayer) {
             case "K":
             case "Q":
             case "J":
-            case "0": {
+            case "10": {
                 countscore = countscore + 10;
                 softcount = softcount + 10;
                 break;
@@ -172,10 +174,17 @@ function makecard(target, quantity) {
         var cardtraits = player[player.length - i];
         var newcard = document.createElement("div");
         newcard.classList.add("card");
-        newcard.innerHTML = cardtraits["Value"] + " - " + cardtraits["Suit"];
+        newcard.innerHTML = "<div class=\"card-number float-left\">" + cardtraits["Value"] + "</div><div class=\"suit-display\">" + cardtraits["Suit"] + "</div><div class=\"card-number float-right\">" + cardtraits["Value"] + "</div>";
+        if (cardtraits["Suit"] === "H" || cardtraits["Suit"] === "D") {
+            newcard.classList.add("red");
+        }
+        else
+            newcard.classList.add("black");
+        console.log("" + cardtraits["Value"]);
         target.append(newcard);
     }
 }
+// event listeners that make the game work
 startbutton.addEventListener("click", function () {
     startgame();
     convert(player, true);
