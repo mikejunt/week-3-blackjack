@@ -120,3 +120,11 @@ transition-timing-function: cubic-bezier(.11,.61,0,.75);
     top: 0 !important;
     left: 0 !important;
 }
+
+#result-display {
+    font-size: 40px;
+    line-height: 40px;
+    text-align: center;
+    width: 100%;
+    padding-top: 60px;
+}

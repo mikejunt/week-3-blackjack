@@ -13,6 +13,7 @@ let hitbutton = document.getElementById("hit");
 let standbutton = document.getElementById("stand");
 let playerhold = document.getElementById("playercardholder");
 let dealerhold = document.getElementById("dealercardholder");
+let resulttext = document.getElementById("result-display")
 let playerscore: number = 0;
 let dealerscore: number = 0;
 let playerstand: boolean;
@@ -50,6 +51,7 @@ function startgame() {
     playerstand = false;
     playerhold.innerHTML = ""
     dealerhold.innerHTML = ""
+    resulttext.innerText = ""
     document.querySelectorAll(".hide-target").forEach((element) => element.classList.add("dealer-hide"));
     document.querySelectorAll(".reset-target").forEach((element) => element.classList.remove("bg-win"));
     document.querySelectorAll(".reset-target").forEach((element) => element.classList.remove("bg-loss"));
@@ -144,12 +146,12 @@ function win() {
     document.getElementById("playerscore").classList.add("bg-win")
     document.getElementById("dealerscore").classList.add("bg-loss")
     if (playerscore === 21) {
-        console.log("Blackjack!")
+        resulttext.innerText = "Blackjack!"
     }
     else if (dealerscore > 21) {
-        console.log("Dealer Busted!")
+        resulttext.innerText = "Dealer busted."
     }
-    else console.log("Won on score!")
+    else resulttext.innerText = `${playerscore} got there.`
 }
 
 function loss() {
@@ -160,12 +162,12 @@ function loss() {
     document.getElementById("dealerscore").classList.add("bg-win")
     document.getElementById("playerscore").classList.add("bg-loss")
     if (dealerscore === 21) {
-        console.log("Dealer blackjack.")
+        resulttext.innerText = "Dealer's blackjack."
     }
     else if (playerscore > 21) {
-        console.log("Player busted.")
+        resulttext.innerText = "You busted."
     }
-    else console.log("Loss on score.")
+    else resulttext.innerText = `${playerscore} wasn't enough.`
 }
 
 function push() {
@@ -174,9 +176,9 @@ function push() {
     document.querySelectorAll(".hide-target").forEach((element) => { element.classList.remove("dealer-hide") })
     document.getElementById("pushtext").innerText = `${pushtotal}`
     if (playerscore === 21) {
-        console.log("Double blackjack?!")
+        resulttext.innerText = "Blackjack? Push."
     }
-    else console.log("Score matched, push.")
+    else resulttext.innerText = "It's a push."
 }
 
 function makecard(target, party: Array<object>, quantity = 1) {

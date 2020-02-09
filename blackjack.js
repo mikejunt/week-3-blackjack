@@ -20,6 +20,7 @@ var hitbutton = document.getElementById("hit");
 var standbutton = document.getElementById("stand");
 var playerhold = document.getElementById("playercardholder");
 var dealerhold = document.getElementById("dealercardholder");
+var resulttext = document.getElementById("result-display");
 var playerscore = 0;
 var dealerscore = 0;
 var playerstand;
@@ -55,6 +56,7 @@ function startgame() {
     playerstand = false;
     playerhold.innerHTML = "";
     dealerhold.innerHTML = "";
+    resulttext.innerText = "";
     document.querySelectorAll(".hide-target").forEach(function (element) { return element.classList.add("dealer-hide"); });
     document.querySelectorAll(".reset-target").forEach(function (element) { return element.classList.remove("bg-win"); });
     document.querySelectorAll(".reset-target").forEach(function (element) { return element.classList.remove("bg-loss"); });
@@ -150,13 +152,13 @@ function win() {
     document.getElementById("playerscore").classList.add("bg-win");
     document.getElementById("dealerscore").classList.add("bg-loss");
     if (playerscore === 21) {
-        console.log("Blackjack!");
+        resulttext.innerText = "Blackjack!";
     }
     else if (dealerscore > 21) {
-        console.log("Dealer Busted!");
+        resulttext.innerText = "Dealer busted.";
     }
     else
-        console.log("Won on score!");
+        resulttext.innerText = playerscore + " got there.";
 }
 function loss() {
     losstotal++;
@@ -166,13 +168,13 @@ function loss() {
     document.getElementById("dealerscore").classList.add("bg-win");
     document.getElementById("playerscore").classList.add("bg-loss");
     if (dealerscore === 21) {
-        console.log("Dealer blackjack.");
+        resulttext.innerText = "Dealer's blackjack.";
     }
     else if (playerscore > 21) {
-        console.log("Player busted.");
+        resulttext.innerText = "You busted.";
     }
     else
-        console.log("Loss on score.");
+        resulttext.innerText = playerscore + " wasn't enough.";
 }
 function push() {
     pushtotal++;
@@ -180,10 +182,10 @@ function push() {
     document.querySelectorAll(".hide-target").forEach(function (element) { element.classList.remove("dealer-hide"); });
     document.getElementById("pushtext").innerText = "" + pushtotal;
     if (playerscore === 21) {
-        console.log("Double blackjack?!");
+        resulttext.innerText = "Blackjack? Push.";
     }
     else
-        console.log("Score matched, push.");
+        resulttext.innerText = "It's a push.";
 }
 function makecard(target, party, quantity) {
     if (quantity === void 0) { quantity = 1; }
