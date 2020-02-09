@@ -27,6 +27,7 @@ var softcount = 0;
 var wintotal = 0;
 var pushtotal = 0;
 var losstotal = 0;
+var inprogress = false;
 // functions
 function shuffle() {
     var _a;
@@ -141,6 +142,7 @@ function evaluate() {
 }
 function win() {
     wintotal++;
+    inprogress = false;
     console.log(wintotal + " wins.  " + losstotal + " losses.  " + pushtotal + " push.");
     document.querySelectorAll(".hide-target").forEach(function (element) { element.classList.remove("dealer-hide"); });
     if (playerscore === 21) {
@@ -154,6 +156,8 @@ function win() {
 }
 function loss() {
     losstotal++;
+    inprogress = false;
+    document.querySelectorAll(".hide-target").forEach(function (element) { element.classList.remove("dealer-hide"); });
     console.log(wintotal + " wins.  " + losstotal + " losses.  " + pushtotal + " push.");
     if (dealerscore === 21) {
         console.log("Dealer blackjack.");
@@ -166,6 +170,8 @@ function loss() {
 }
 function push() {
     pushtotal++;
+    inprogress = false;
+    document.querySelectorAll(".hide-target").forEach(function (element) { element.classList.remove("dealer-hide"); });
     console.log(wintotal + " wins.  " + losstotal + " losses.  " + pushtotal + " push.");
     if (playerscore === 21) {
         console.log("Double blackjack?!");
@@ -190,36 +196,43 @@ function makecard(target, party, quantity) {
 }
 // event listeners that make the game work
 startbutton.addEventListener("click", function () {
-    startgame();
-    convert(player, true);
-    convert(dealer, false);
-    evaluate();
-});
-hitbutton.addEventListener("click", function () {
-    deal(player, 1);
-    makecard(playerhold, player, 1);
-    convert(player, true);
-    playerdisplay.innerText = "" + playerscore;
-    if (playerscore > 20) {
+    if (inprogress === false) {
+        inprogress = true;
+        startgame();
+        convert(player, true);
+        convert(dealer, false);
         evaluate();
     }
 });
+hitbutton.addEventListener("click", function () {
+    if (inprogress === true) {
+        deal(player, 1);
+        makecard(playerhold, player, 1);
+        convert(player, true);
+        playerdisplay.innerText = "" + playerscore;
+        if (playerscore > 20) {
+            evaluate();
+        }
+    }
+});
 standbutton.addEventListener("click", function () {
-    playerstand = true;
-    if (dealerscore < 17) {
-        do {
-            deal(dealer, 1);
-            convert(dealer, false);
-            makecard(dealerhold, dealer, 1);
-        } while (dealerscore < 17);
+    if (inprogress === true) {
+        playerstand = true;
+        if (dealerscore < 17) {
+            do {
+                deal(dealer, 1);
+                convert(dealer, false);
+                makecard(dealerhold, dealer, 1);
+            } while (dealerscore < 17);
+        }
+        if (dealerscore === 17 && softcount < 8) {
+            do {
+                deal(dealer, 1);
+                convert(dealer, false);
+                makecard(dealerhold, dealer, 1);
+            } while (softcount < 8);
+        }
+        dealerdisplay.innerText = "" + dealerscore;
+        evaluate();
     }
-    if (dealerscore === 17 && softcount < 7) {
-        do {
-            deal(dealer, 1);
-            convert(dealer, false);
-            makecard(dealerhold, dealer, 1);
-        } while (softcount < 7);
-    }
-    dealerdisplay.innerText = "" + dealerscore;
-    evaluate();
 });

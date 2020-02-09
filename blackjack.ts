@@ -20,6 +20,7 @@ let softcount: number = 0;
 let wintotal: number = 0;
 let pushtotal: number = 0;
 let losstotal: number = 0;
+let inprogress: boolean = false;
 
 // functions
 function shuffle() {
@@ -49,12 +50,12 @@ function startgame() {
     playerstand = false;
     playerhold.innerHTML = ""
     dealerhold.innerHTML = ""
-    document.querySelectorAll(".hide-target").forEach((element)=>element.classList.add("dealer-hide"))
+    document.querySelectorAll(".hide-target").forEach((element) => element.classList.add("dealer-hide"))
     shuffle();
     deal(player, 2);
     deal(dealer, 2);
-    makecard(playerhold,player, 2);
-    makecard(dealerhold,dealer, 2)
+    makecard(playerhold, player, 2);
+    makecard(dealerhold, dealer, 2)
     convert(player, true);
     convert(dealer, false);
     playerdisplay.innerText = `${playerscore}`
@@ -135,8 +136,9 @@ function evaluate() {
 
 function win() {
     wintotal++;
+    inprogress = false;
     console.log(`${wintotal} wins.  ${losstotal} losses.  ${pushtotal} push.`)
-    document.querySelectorAll(".hide-target").forEach((element)=>{element.classList.remove("dealer-hide")})
+    document.querySelectorAll(".hide-target").forEach((element) => { element.classList.remove("dealer-hide") })
     if (playerscore === 21) {
         console.log("Blackjack!")
     }
@@ -148,6 +150,8 @@ function win() {
 
 function loss() {
     losstotal++;
+    inprogress = false;
+    document.querySelectorAll(".hide-target").forEach((element) => { element.classList.remove("dealer-hide") })
     console.log(`${wintotal} wins.  ${losstotal} losses.  ${pushtotal} push.`)
     if (dealerscore === 21) {
         console.log("Dealer blackjack.")
@@ -160,6 +164,8 @@ function loss() {
 
 function push() {
     pushtotal++;
+    inprogress = false;
+    document.querySelectorAll(".hide-target").forEach((element) => { element.classList.remove("dealer-hide") })
     console.log(`${wintotal} wins.  ${losstotal} losses.  ${pushtotal} push.`)
     if (playerscore === 21) {
         console.log("Double blackjack?!")
@@ -167,7 +173,7 @@ function push() {
     else console.log("Score matched, push.")
 }
 
-function makecard(target,party: Array<object>,quantity = 1) {
+function makecard(target, party: Array<object>, quantity = 1) {
     for (let i = 1; i < quantity + 1; i++) {
         let cardtraits = party[party.length - i];
         let newcard = document.createElement("div");
@@ -181,40 +187,47 @@ function makecard(target,party: Array<object>,quantity = 1) {
 
 // event listeners that make the game work
 startbutton.addEventListener("click", () => {
-    startgame()
-    convert(player, true);
-    convert(dealer, false);
-    evaluate()
-})
-
-hitbutton.addEventListener("click", () => {
-    deal(player, 1);
-    makecard(playerhold,player,1);
-    convert(player, true);
-    playerdisplay.innerText = `${playerscore}`
-    if (playerscore > 20) {
+    if (inprogress === false) {
+        inprogress = true;
+        startgame()
+        convert(player, true);
+        convert(dealer, false);
         evaluate()
     }
 })
 
+hitbutton.addEventListener("click", () => {
+    if (inprogress === true) {
+        deal(player, 1);
+        makecard(playerhold, player, 1);
+        convert(player, true);
+        playerdisplay.innerText = `${playerscore}`
+        if (playerscore > 20) {
+            evaluate()
+        }
+    }
+})
+
 standbutton.addEventListener("click", () => {
-    playerstand = true;
-    if (dealerscore < 17) {
-        do {
-            deal(dealer, 1);
-            convert(dealer, false);
-            makecard(dealerhold,dealer,1)
+    if (inprogress === true) {
+        playerstand = true;
+        if (dealerscore < 17) {
+            do {
+                deal(dealer, 1);
+                convert(dealer, false);
+                makecard(dealerhold, dealer, 1)
+            }
+            while (dealerscore < 17)
         }
-        while (dealerscore < 17)
-    }
-    if (dealerscore === 17 && softcount < 7) {
-        do {
-            deal(dealer, 1);
-            convert(dealer, false)
-            makecard(dealerhold,dealer,1)
+        if (dealerscore === 17 && softcount < 8) {
+            do {
+                deal(dealer, 1);
+                convert(dealer, false)
+                makecard(dealerhold, dealer, 1)
+            }
+            while (softcount < 8)
         }
-        while (softcount < 7)
+        dealerdisplay.innerText = `${dealerscore}`
+        evaluate()
     }
-    dealerdisplay.innerText = `${dealerscore}`
-    evaluate()
 })
