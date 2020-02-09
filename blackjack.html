@@ -11,18 +11,22 @@
 <body>
     <main>
         <section id="playercardholder" class="cardholder"></section>
-        <section class="interface">
-            <div id="playerscore" class="score"></div>
-            <div class="score"><div id="dealerscore" class="dealer-hide hide-target"></div></div>
-            <div><button id="start" class="start">START</button></div>
-            <div><button id="hit" class="hit">HIT</button></div>
-            <div><button id="stand" class="stand">STAND</button></div>
+        <section class="cardholder"><div class="score-divider black stat-font"><p>Your wins:<span id="wintext">0</span></p><p>Your losses:<span id="losstext">0</span></p><p>Your pushes:<span id="pushtext">0</span></p></div>
+            <div class="score-divider"><div class="score player-bg">
+                <div id="playerscore" class="reset-target"></div>
+            </div>
+            <div class="score dealer-bg">
+                <div id="dealerscore" class="reset-target dealer-hide hide-target"></div>
+            </div>
+            <div><button id="hit" class="control-button">HIT</button>
+                 <button id="start" class="control-button">START</button>
+                 <button id="stand" class="control-button">STAND</button></div> </div>
         </section>
         <section class="dealer-outside cardholder">
             <div id="dealercardholder" class="dealer-hide hide-target"></div>
-        </section>
+        </section><div class="bg-win bg-loss"
     </main>
-    
+
 </body>
 <script src="blackjack.js"></script>
 

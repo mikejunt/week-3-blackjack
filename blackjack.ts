@@ -50,7 +50,9 @@ function startgame() {
     playerstand = false;
     playerhold.innerHTML = ""
     dealerhold.innerHTML = ""
-    document.querySelectorAll(".hide-target").forEach((element) => element.classList.add("dealer-hide"))
+    document.querySelectorAll(".hide-target").forEach((element) => element.classList.add("dealer-hide"));
+    document.querySelectorAll(".reset-target").forEach((element) => element.classList.remove("bg-win"));
+    document.querySelectorAll(".reset-target").forEach((element) => element.classList.remove("bg-loss"));
     shuffle();
     deal(player, 2);
     deal(dealer, 2);
@@ -137,8 +139,10 @@ function evaluate() {
 function win() {
     wintotal++;
     inprogress = false;
-    console.log(`${wintotal} wins.  ${losstotal} losses.  ${pushtotal} push.`)
+    document.getElementById("wintext").innerText = `${wintotal}`
     document.querySelectorAll(".hide-target").forEach((element) => { element.classList.remove("dealer-hide") })
+    document.getElementById("playerscore").classList.add("bg-win")
+    document.getElementById("dealerscore").classList.add("bg-loss")
     if (playerscore === 21) {
         console.log("Blackjack!")
     }
@@ -152,7 +156,9 @@ function loss() {
     losstotal++;
     inprogress = false;
     document.querySelectorAll(".hide-target").forEach((element) => { element.classList.remove("dealer-hide") })
-    console.log(`${wintotal} wins.  ${losstotal} losses.  ${pushtotal} push.`)
+    document.getElementById("losstext").innerText = `${losstotal}`
+    document.getElementById("dealerscore").classList.add("bg-win")
+    document.getElementById("playerscore").classList.add("bg-loss")
     if (dealerscore === 21) {
         console.log("Dealer blackjack.")
     }
@@ -166,7 +172,7 @@ function push() {
     pushtotal++;
     inprogress = false;
     document.querySelectorAll(".hide-target").forEach((element) => { element.classList.remove("dealer-hide") })
-    console.log(`${wintotal} wins.  ${losstotal} losses.  ${pushtotal} push.`)
+    document.getElementById("pushtext").innerText = `${pushtotal}`
     if (playerscore === 21) {
         console.log("Double blackjack?!")
     }
@@ -177,11 +183,16 @@ function makecard(target, party: Array<object>, quantity = 1) {
     for (let i = 1; i < quantity + 1; i++) {
         let cardtraits = party[party.length - i];
         let newcard = document.createElement("div");
-        newcard.classList.add("card");
-        newcard.innerHTML = `<div class="card-number float-left">${cardtraits["Value"]}</div><div class="suit-display">${cardtraits["Suit"]}</div><div class="card-number float-right">${cardtraits["Value"]}</div>`
+        newcard.classList.add(`card`);
+        newcard.classList.add(`card-trans-setup`);
+        newcard.innerHTML = `<div class="card-number float-left">${cardtraits["Value"]}</div><div class="card-number float-left">${cardtraits["Suit"]}</div><div class="suit-display">${cardtraits["Suit"]}</div><div class="card-number float-right">${cardtraits["Suit"]}</div><div class="card-number float-right">${cardtraits["Value"]}</div>`
         if (cardtraits["Suit"] === "♥" || cardtraits["Suit"] === "♦") { newcard.classList.add("red") }
         else newcard.classList.add("black");
         target.append(newcard);
+        let timer: number = (200 * i) + 50;
+        window.setTimeout(() => {
+            newcard.classList.add("card-mover")
+        }, timer);
     }
 }
 
@@ -200,11 +211,13 @@ hitbutton.addEventListener("click", () => {
     if (inprogress === true) {
         deal(player, 1);
         makecard(playerhold, player, 1);
-        convert(player, true);
-        playerdisplay.innerText = `${playerscore}`
-        if (playerscore > 20) {
-            evaluate()
-        }
+        window.setTimeout(() => {
+            convert(player, true);
+            playerdisplay.innerText = `${playerscore}`
+            if (playerscore > 20) {
+                evaluate()
+            }
+        }, 1200);
     }
 })
 
@@ -227,7 +240,9 @@ standbutton.addEventListener("click", () => {
             }
             while (softcount < 8)
         }
-        dealerdisplay.innerText = `${dealerscore}`
-        evaluate()
+        window.setTimeout(() => {
+            dealerdisplay.innerText = `${dealerscore}`
+            evaluate()
+        }, 1200);
     }
 })

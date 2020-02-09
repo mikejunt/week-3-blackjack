@@ -56,6 +56,8 @@ function startgame() {
     playerhold.innerHTML = "";
     dealerhold.innerHTML = "";
     document.querySelectorAll(".hide-target").forEach(function (element) { return element.classList.add("dealer-hide"); });
+    document.querySelectorAll(".reset-target").forEach(function (element) { return element.classList.remove("bg-win"); });
+    document.querySelectorAll(".reset-target").forEach(function (element) { return element.classList.remove("bg-loss"); });
     shuffle();
     deal(player, 2);
     deal(dealer, 2);
@@ -143,8 +145,10 @@ function evaluate() {
 function win() {
     wintotal++;
     inprogress = false;
-    console.log(wintotal + " wins.  " + losstotal + " losses.  " + pushtotal + " push.");
+    document.getElementById("wintext").innerText = "" + wintotal;
     document.querySelectorAll(".hide-target").forEach(function (element) { element.classList.remove("dealer-hide"); });
+    document.getElementById("playerscore").classList.add("bg-win");
+    document.getElementById("dealerscore").classList.add("bg-loss");
     if (playerscore === 21) {
         console.log("Blackjack!");
     }
@@ -158,7 +162,9 @@ function loss() {
     losstotal++;
     inprogress = false;
     document.querySelectorAll(".hide-target").forEach(function (element) { element.classList.remove("dealer-hide"); });
-    console.log(wintotal + " wins.  " + losstotal + " losses.  " + pushtotal + " push.");
+    document.getElementById("losstext").innerText = "" + losstotal;
+    document.getElementById("dealerscore").classList.add("bg-win");
+    document.getElementById("playerscore").classList.add("bg-loss");
     if (dealerscore === 21) {
         console.log("Dealer blackjack.");
     }
@@ -172,7 +178,7 @@ function push() {
     pushtotal++;
     inprogress = false;
     document.querySelectorAll(".hide-target").forEach(function (element) { element.classList.remove("dealer-hide"); });
-    console.log(wintotal + " wins.  " + losstotal + " losses.  " + pushtotal + " push.");
+    document.getElementById("pushtext").innerText = "" + pushtotal;
     if (playerscore === 21) {
         console.log("Double blackjack?!");
     }
@@ -181,17 +187,25 @@ function push() {
 }
 function makecard(target, party, quantity) {
     if (quantity === void 0) { quantity = 1; }
-    for (var i = 1; i < quantity + 1; i++) {
+    var _loop_1 = function (i) {
         var cardtraits = party[party.length - i];
         var newcard = document.createElement("div");
         newcard.classList.add("card");
-        newcard.innerHTML = "<div class=\"card-number float-left\">" + cardtraits["Value"] + "</div><div class=\"suit-display\">" + cardtraits["Suit"] + "</div><div class=\"card-number float-right\">" + cardtraits["Value"] + "</div>";
+        newcard.classList.add("card-trans-setup");
+        newcard.innerHTML = "<div class=\"card-number float-left\">" + cardtraits["Value"] + "</div><div class=\"card-number float-left\">" + cardtraits["Suit"] + "</div><div class=\"suit-display\">" + cardtraits["Suit"] + "</div><div class=\"card-number float-right\">" + cardtraits["Suit"] + "</div><div class=\"card-number float-right\">" + cardtraits["Value"] + "</div>";
         if (cardtraits["Suit"] === "♥" || cardtraits["Suit"] === "♦") {
             newcard.classList.add("red");
         }
         else
             newcard.classList.add("black");
         target.append(newcard);
+        var timer = (200 * i) + 50;
+        window.setTimeout(function () {
+            newcard.classList.add("card-mover");
+        }, timer);
+    };
+    for (var i = 1; i < quantity + 1; i++) {
+        _loop_1(i);
     }
 }
 // event listeners that make the game work
@@ -208,11 +222,13 @@ hitbutton.addEventListener("click", function () {
     if (inprogress === true) {
         deal(player, 1);
         makecard(playerhold, player, 1);
-        convert(player, true);
-        playerdisplay.innerText = "" + playerscore;
-        if (playerscore > 20) {
-            evaluate();
-        }
+        window.setTimeout(function () {
+            convert(player, true);
+            playerdisplay.innerText = "" + playerscore;
+            if (playerscore > 20) {
+                evaluate();
+            }
+        }, 1200);
     }
 });
 standbutton.addEventListener("click", function () {
@@ -232,7 +248,9 @@ standbutton.addEventListener("click", function () {
                 makecard(dealerhold, dealer, 1);
             } while (softcount < 8);
         }
-        dealerdisplay.innerText = "" + dealerscore;
-        evaluate();
+        window.setTimeout(function () {
+            dealerdisplay.innerText = "" + dealerscore;
+            evaluate();
+        }, 1200);
     }
 });
