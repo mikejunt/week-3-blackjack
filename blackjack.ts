@@ -1,5 +1,5 @@
 // global variables
-const spades: Array<object> = [{ Suit: "♠", Value: "A" }, { Suit: "♠", Value: "2" }, { Suit: "♠", Value: "3" }, { Suit: "♠", Value: "4" }, { Suit: "♠", Value: "5" }, { Suit: "♠", Value: "6" }, { Suit: "♠", Value: "7" }, { Suit: "♠", Value: "8" }, { Suit: "♠", Value: "9" }, { Suit: "♠", Value: "10" }, { Suit: "♠", Value: "J" }, { Suit: "♠", Value: "Q" }, { Suit: "♠", Value: "K" }];
+(function () {const spades: Array<object> = [{ Suit: "♠", Value: "A" }, { Suit: "♠", Value: "2" }, { Suit: "♠", Value: "3" }, { Suit: "♠", Value: "4" }, { Suit: "♠", Value: "5" }, { Suit: "♠", Value: "6" }, { Suit: "♠", Value: "7" }, { Suit: "♠", Value: "8" }, { Suit: "♠", Value: "9" }, { Suit: "♠", Value: "10" }, { Suit: "♠", Value: "J" }, { Suit: "♠", Value: "Q" }, { Suit: "♠", Value: "K" }];
 const diamonds: Array<object> = [{ Suit: "♦", Value: "A" }, { Suit: "♦", Value: "2" }, { Suit: "♦", Value: "3" }, { Suit: "♦", Value: "4" }, { Suit: "♦", Value: "5" }, { Suit: "♦", Value: "6" }, { Suit: "♦", Value: "7" }, { Suit: "♦", Value: "8" }, { Suit: "♦", Value: "9" }, { Suit: "♦", Value: "10" }, { Suit: "♦", Value: "J" }, { Suit: "♦", Value: "Q" }, { Suit: "♦", Value: "K" }];
 const hearts: Array<object> = [{ Suit: "♥", Value: "A" }, { Suit: "♥", Value: "2" }, { Suit: "♥", Value: "3" }, { Suit: "♥", Value: "4" }, { Suit: "♥", Value: "5" }, { Suit: "♥", Value: "6" }, { Suit: "♥", Value: "7" }, { Suit: "♥", Value: "8" }, { Suit: "♥", Value: "9" }, { Suit: "♥", Value: "10" }, { Suit: "♥", Value: "J" }, { Suit: "♥", Value: "Q" }, { Suit: "♥", Value: "K" }];
 const clubs: Array<object> = [{ Suit: "♣", Value: "A" }, { Suit: "♣", Value: "2" }, { Suit: "♣", Value: "3" }, { Suit: "♣", Value: "4" }, { Suit: "♣", Value: "5" }, { Suit: "♣", Value: "6" }, { Suit: "♣", Value: "7" }, { Suit: "♣", Value: "8" }, { Suit: "♣", Value: "9" }, { Suit: "♣", Value: "10" }, { Suit: "♣", Value: "J" }, { Suit: "♣", Value: "Q" }, { Suit: "♣", Value: "K" }];
@@ -248,3 +248,4 @@ standbutton.addEventListener("click", () => {
         }, 1200);
     }
 })
+})()
