@@ -73,13 +73,20 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     }
     function cardsort(a, b) {
         if (a["Value"] === "A") {
-            return 1;
+            return -1;
         }
         return 0;
     }
     function convert(playername, isplayer) {
         var countscore = 0;
-        var evaluatearray = playername.sort(cardsort);
+        softcount = 0;
+        var evaluatearray = playername.sort(function (a, b) {
+            if (a["Value"] != "A") {
+                return -1;
+            }
+            else
+                return 0;
+        });
         for (var i = 0; i < evaluatearray.length; i++) {
             switch (evaluatearray[i]["Value"]) {
                 case "K":
